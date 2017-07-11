@@ -8,10 +8,18 @@ use yii\web\Controller;
 use yii\web\Response;
 use yii\filters\VerbFilter;
 use app\models\LoginForm;
-use app\models\ContactForm;
+use app\models\Hotels;
+use app\controllers\Module;
 
 class SiteController extends Controller
 {
+
+    public function __construct($id, Module $module, array $config = [])
+    {
+        parent::__construct($id, $module, $config);
+        $this->hotel = new Hotels();
+    }
+
     /**
      * @inheritdoc
      */
@@ -61,7 +69,18 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        return $this->render('index');
+
+        return $this->render('index', [
+            'hotels' => $this->hotels->getHotels()
+        ]);
+    }
+
+    public function actionHotels()
+    {
+
+        return $this->render('hotels', [
+            'hotels' => $this->hotels->getHotels(),
+        ]);
     }
 
     /**
@@ -124,7 +143,7 @@ class SiteController extends Controller
         return $this->render('about');
     }
 
-    public function getSearchForm() {
+    public function actionGetSearchForm() {
         return $this->render('searchform');
 
     }
